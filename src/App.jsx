@@ -41,7 +41,7 @@ function App() {
     // make request
     let responseR = await axios.post(GATEWAY_URL+'/create_key', request)
     document.querySelector(`#resultKey`).innerHTML = `<b>key</b>: ${responseR.data.key}`;
-    document.querySelector(`#resultSecret`).innerHTML = `<b>key</b>: ${responseR.data.secret}`;
+    document.querySelector(`#resultSecret`).innerHTML = `<b>secret</b>: ${responseR.data.secret}`;
   }
 
   return (
