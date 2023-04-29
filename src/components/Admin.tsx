@@ -1,13 +1,82 @@
 import { useState, useEffect } from "react";
+import { Button, Space, message, Tooltip} from "antd";
+import { CopyOutlined } from "@ant-design/icons";
 
 const Admin = () => {
+  const [loading, setLoading] = useState(false);
+  const [mannaVouchers, setMannaVouchers] = useState<any[]>([]);
+
+  const handleCopyToClipboard = (code: string) => {
+    navigator.clipboard.writeText(code);
+    message.success("Manna voucher code copied to clipboard.");
+  };
+
+  const handleCreateManna = async (balance: number | null) => {
+    setLoading(true);
+    if (!balance) {
+      balance = parseInt(prompt("Enter Manna amount: ") || "0");
+    }
+    if (!balance) {
+      setLoading(false);
+      return;
+    }
+    try {
+      const response = await fetch("/api/createmanna", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ balance }),
+      });
+      const result = await response.json();
+      if (result.error) {
+        message.error(result.error);
+      }
+      else if (result.mannaVoucher) {
+        setMannaVouchers([...mannaVouchers, {code: result.mannaVoucher, balance: balance}]);
+        message.success(`Manna voucher ${result.mannaVoucher} created`);
+      }
+    } catch (error: any) {
+      alert(`Failed to create manna: ${error.message}`);
+    } 
+    setLoading(false);
+  };
 
   return (
     <div>
-      <h1>Update Manna</h1>
+      <h1>Create Manna Voucher</h1>
+      <Space>
+        <Button type="primary" onClick={() => handleCreateManna(10)} loading={loading}>
+          10 Manna
+        </Button>
+        <Button type="primary" onClick={() => handleCreateManna(100)} loading={loading}>
+          100 Manna
+        </Button>
+        <Button type="primary" onClick={() => handleCreateManna(1000)} loading={loading}>
+          1,000 Manna
+        </Button>
+        <Button type="primary" onClick={() => handleCreateManna(null)} loading={loading}>
+          Custom
+        </Button>
+      </Space>
+      <p></p>
+      <ul style={{"lineHeight": "2.5em"}}>
+        {mannaVouchers.map((mannaVoucher) => (
+          <li key={mannaVoucher.code}>
+            <Space>
+              <span style={{fontSize: "1.25em"}}>{mannaVoucher.code}</span>
+              <span style={{fontSize: "1.25em"}}>({mannaVoucher.balance} Manna)</span>
+              <span>
+                <Tooltip title="Copy to clipboard">
+                  <CopyOutlined onClick={() => handleCopyToClipboard(mannaVoucher.code)} />
+                </Tooltip>
+              </span>
+            </Space>
+          </li>
+        ))}
+      </ul>
     </div>
   );
-
 };
 
 export default Admin;
