@@ -11,6 +11,56 @@ const Admin = () => {
     message.success("Manna voucher code copied to clipboard.");
   };
 
+  /*
+  const handleGiveManna = async (balance: number | null) => {
+    setLoading(true);
+    if (!balance) {
+      balance = parseInt(prompt("Enter Manna amount: ") || "0");
+    }
+    if (!balance) {
+      setLoading(false);
+      return;
+    }
+    const username = prompt("Enter username (or wallet address): ");
+    if (!username) {
+      setLoading(false);
+      return;
+    }
+    const response = await fetch("/api/profile", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username }),
+    });
+    const result = await response.json();
+    if (result.error) {
+      message.error(result.error);
+      setLoading(false);
+      return;
+    }    
+    try {
+      const response = await fetch("/api/givemanna", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, balance }),
+      });
+      const result = await response.json();
+      if (result.error) {
+        message.error(result.error);
+      }
+      else if (result.success) {        
+        message.success(`${balance} Manna given to ${username}.`);
+      }
+    } catch (error: any) {
+      alert(`Failed to create manna: ${error.message}`);
+    } 
+    setLoading(false);
+  };
+  */
+
   const handleCreateManna = async (balance: number | null) => {
     setLoading(true);
     if (!balance) {
@@ -75,6 +125,21 @@ const Admin = () => {
           </li>
         ))}
       </ul>
+      {/* <h1>Give Manna to User</h1>
+      <Space>
+        <Button type="primary" onClick={() => handleGiveManna(10)} loading={loading}>
+          10 Manna
+        </Button>
+        <Button type="primary" onClick={() => handleGiveManna(100)} loading={loading}>
+          100 Manna
+        </Button>
+        <Button type="primary" onClick={() => handleGiveManna(1000)} loading={loading}>
+          1,000 Manna
+        </Button>
+        <Button type="primary" onClick={() => handleGiveManna(null)} loading={loading}>
+          Custom
+        </Button>
+      </Space> */}
     </div>
   );
 };
