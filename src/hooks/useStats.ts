@@ -39,7 +39,7 @@ export const useStats = () => {
   return {
     stats,
     isLoading,
-    error: data?.error,
+    // error: data?.error,
     mutate,
   };
 };
