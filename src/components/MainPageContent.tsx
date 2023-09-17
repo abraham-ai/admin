@@ -1,14 +1,8 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-
 import React, { useState, useContext, useEffect } from 'react';
 import { ToolOutlined, UserOutlined } from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
 import type { MenuProps } from 'antd';
 
-import { useAccount } from "wagmi";
-import AppContext from 'context/AppContext'
-
-import Account from "components/Account";
 import Admin from "components/Admin";
 import Dashboard from "components/Dashboard";
 
@@ -32,15 +26,10 @@ function getItem(
 
 const MainPageContent = () => {
 
-  const { address, isConnected } = useAccount();
-  const { isSignedIn, setIsSignedIn } = useContext(AppContext);
-
   const items: MenuItem[] = [
     getItem('Admin', 'sub1', <UserOutlined />, [
-      ...(isConnected && isSignedIn ? [
-        getItem('Manna', '2'),
-        getItem('Dashboard', '3'),
-      ] : []),
+      getItem('Manna', '2'),
+      getItem('Dashboard', '3'),
     ]),
   ];
 
@@ -53,7 +42,7 @@ const MainPageContent = () => {
   }
 
   useEffect(() => {
-    setActiveItem('1');
+    setActiveItem('2');
   }, [setActiveItem]);
 
   return (
@@ -83,10 +72,9 @@ const MainPageContent = () => {
           alignItems: "center",
           justifyContent: "space-between"
         }}>
-          <ConnectButton />
+          Hello
         </Header>
         <Content style={{ margin: '0 16px', padding: "16px", background: colorBgContainer }}>    
-          {activeItem === '1' && <Account />}   
           {activeItem === '2' && <Admin />}
           {activeItem === '3' && <Dashboard />}
         </Content>
